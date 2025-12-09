@@ -15,6 +15,8 @@ const db = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
+  connectTimeout: 20000
 });
 
 db.connect((err) => {
@@ -24,6 +26,7 @@ db.connect((err) => {
     console.log("MySQL Connected Successfully");
   }
 });
+
 
 // 📌 POST: Save Consultation Form
 app.post("/api/consult", (req, res) => {
