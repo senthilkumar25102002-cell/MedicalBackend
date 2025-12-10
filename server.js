@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // ---------------------------------------------
-// ✅ MySQL Connection Pool (Correct for Render)
+// ✅ MySQL Connection Pool (Correct for Railway)
 // ---------------------------------------------
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
@@ -21,9 +21,10 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  connectTimeout: 20000,
 });
 
-// 🔄 Keep DB Alive (Render closes idle DB connections)
+// 🔄 Keep DB Alive
 setInterval(async () => {
   try {
     await pool.query("SELECT 1");
@@ -119,9 +120,7 @@ app.post("/api/book-appointment", async (req, res) => {
     });
   } catch (err) {
     console.log("❌ Error inserting appointment:", err);
-    res
-      .status(500)
-      .json({ success: false, message: "Database Error" });
+    res.status(500).json({ success: false, message: "Database Error" });
   }
 });
 
